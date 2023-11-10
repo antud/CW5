@@ -24,16 +24,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-
     String url = "https://api.textcortex.com/v1/texts/social-media-posts";
-
     String contextString;
-    //String[] keywordsString;
-    String storyString;
+    String keywordsString;
     EditText context;
     EditText keywords;
     TextView story;
-    //Button submit = findViewById(R.id.submit_button);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,19 +40,16 @@ public class MainActivity extends AppCompatActivity {
         keywords = findViewById(R.id.keywords);
         story = findViewById(R.id.story);
 
-        //Button submit = findViewById(R.id.submit_button);
-
-
     }
 
-    void makeHttpRequest(String c) throws JSONException {
+    void makeHttpRequest(String c, String[] k) throws JSONException {
         JSONObject data = new JSONObject();
         data.put("context", c);
-        data.put("max_tokens", 100);
+        data.put("max_tokens", 250);
         data.put("mode", "twitter");
         data.put("model", "chat-sophos-1");
 
-        String[] keywords = {"mouse", "shoe"};
+        String[] keywords = k;
         data.put("keywords", new JSONArray(keywords));
 
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, data, new Response.Listener<JSONObject>() {
@@ -71,37 +64,35 @@ public class MainActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-
-                //Log.e("response", response.toString());
             }
         }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                // TODO: Handle error
                 Log.e("error", new String(error.networkResponse.data));
-
             }
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
-                headers.put("Authorization", "Bearer " + API_KEY);
+                headers.put("Authorization", "Bearer " + Key.API_KEY);
                 return headers;
             }
         };
-
         RequestQueue rq = Volley.newRequestQueue(this);
         rq.add(req);
     }
 
     public void onSubmit(View view) throws JSONException {
         contextString = context.getText().toString();
-        //keywordsString = keywords
+        keywordsString = keywords.getText().toString();
 
-        makeHttpRequest(contextString);
-        //storyString = makeHttpRequest(contextString);
+        String[] k = keywordsString.split(",");
 
+        for (int i = 0; i < k.length; i++) {
+            k[i] = k[i].trim();
+        }
+        makeHttpRequest(contextString, k);
     }
 }
