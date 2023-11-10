@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         context = findViewById(R.id.context);
         keywords = findViewById(R.id.keywords);
         story = findViewById(R.id.story);
-
     }
 
     void makeHttpRequest(String c, String[] k) throws JSONException {

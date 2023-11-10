@@ -6,11 +6,21 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please enter in the context below." />
+
     <EditText
         android:id="@+id/context"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Context" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please enter in the keywords below." />
 
     <EditText
         android:id="@+id/keywords"
